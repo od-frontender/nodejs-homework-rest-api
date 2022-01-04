@@ -16,23 +16,28 @@ const contactsSchema = Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
 });
+
+const patterns = {
+  name: /[a-zA-Zа-яА-Я]*$/,
+  phone: /^(?:\+\s?\d+\s?)?(?:\(\d{1,4}\))?(?:[-\s./]?\d){5,}$/,
+  email: /^\w+([\.-]?\w+)+@\w+([\.:]?\w+)+(\.[a-zA-Z0-9]{2,3})+$/,
+};
 
 const joiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string().pattern(patterns.name).min(1).max(20).required(),
+  email: Joi.string().pattern(patterns.email).required(),
+  phone: Joi.string().pattern(patterns.phone).required(),
   favorite: Joi.bool(),
 });
-
-// const statusJoiSchema = Joi.object({
-//   status: Joi.string().valid('basic', 'sale', 'stock').required(),
-// });
 
 const Contact = model('contact', contactsSchema);
 
 module.exports = {
   Contact,
   joiSchema,
-  // statusJoiSchema,
 };
