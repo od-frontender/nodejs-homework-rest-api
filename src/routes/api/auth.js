@@ -9,6 +9,7 @@ const router = express.Router();
 const { User } = require('../../models');
 const { joiRegisterSchema, joiLoginSchema } = require('../../models/user');
 const { authenticate, upload } = require('../../middlewares');
+const jimp = require('../../helpers/jimp');
 
 const { SECRET_KEY } = process.env;
 const avatarsDir = path.join(__dirname, '../../../', 'public', 'avatars');
@@ -97,6 +98,7 @@ router.patch(
   upload.single('avatar'),
   async (req, res) => {
     const { path: tempUpload, filename } = req.file;
+    await jimp(tempUpload);
     const [extension] = filename.split('.').reverse();
     const newFleName = `${req.user._id}.${extension}`;
     const fileUpload = path.join(avatarsDir, newFleName);
