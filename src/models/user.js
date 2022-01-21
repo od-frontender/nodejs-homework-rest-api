@@ -23,6 +23,10 @@ const userSchema = Schema({
     type: String,
     default: null,
   },
+  avatarURL: {
+    type: String,
+    default: '',
+  },
 });
 
 const joiRegisterSchema = Joi.object({
